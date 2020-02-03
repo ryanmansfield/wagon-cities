@@ -1,16 +1,27 @@
+
 import React, { Component } from 'react';
-import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { setCities } from '../actions';
+import { bindActionCreators } from 'redux';
 
-import City from './city.jsx'
+import City from '../containers/city';
 
-function mapDispatchToProps(dispatch) {
-  return bindActionCreators(
-    { setCities: setCities },
-    dispatch
-  );
-}
+class CityList extends Component {
+  renderList() {
+    return this.props.cities.map((city) => {
+      return (
+        <City key={city.name} city={city} />
+      );
+    });
+  };
+
+  render() {
+    return (
+      <ul className="list-group cities">
+        {this.renderList()}
+      </ul>
+    );
+  }
+};
 
 function mapStateToProps(state) {
   return {
@@ -18,19 +29,4 @@ function mapStateToProps(state) {
   };
 }
 
-class CityList extends Component {
-  componentWillMount() {
-    // TODO Dispatch an action to update the REDUX state tree (cities)
-    this.props.setCities();
-  }
-
-  render () {
-    return (
-      <div className='cities'>
-        {this.props.cities.map((city) => <City city={city} key={city.name} />)}
-      </div>
-    );
-  }
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(CityList);
+export default connect(mapStateToProps)(CityList);
